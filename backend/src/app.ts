@@ -5,10 +5,11 @@
  * - Plugar segurança, tratamento de erro e rotas
  * - Ficar separado do server.ts pra os testes conseguirem usar a API sem subir servidor
  * Feito por: Arthur Roberto Weege Pontes
- * Versão: 1.0.0
+ * Versão: 1.1.0
  * Data: 2026-09-11
  * Alterações:
  * - v1.0.0 (2026-09-11): Implementação inicial
+ * - v1.1.0 (2026-09-11): Plugin de autenticação (JWT)
  */
 
 import Fastify from "fastify"
@@ -16,6 +17,7 @@ import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fas
 import { env } from "./config/env.js"
 import { prisma } from "./config/prisma.js"
 import { errorHandler } from "./errors/errorHandler.js"
+import { authPlugin } from "./plugins/auth.js"
 import { securityPlugin } from "./plugins/security.js"
 import { routes } from "./routes/index.js"
 
@@ -53,6 +55,7 @@ export async function buildApp({ rateLimit = env.NODE_ENV !== "test" }: BuildApp
 
   // Segurança antes das rotas, senão o rate limit não enxerga elas
   await app.register(securityPlugin, { rateLimit })
+  await app.register(authPlugin)
 
   await app.register(routes)
 
