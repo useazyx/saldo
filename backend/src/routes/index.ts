@@ -15,12 +15,14 @@
  * - v1.5.0 (2026-09-11): Regras de categoria em /rules
  * - v1.6.0 (2026-09-11): Lançamentos em /transactions
  * - v1.7.0 (2026-09-11): Relatórios em /reports
+ * - v1.8.0 (2026-09-11): Orçamentos em /budgets
  */
 
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
 import { z } from "zod"
 import { accountRoutes } from "./accountRoutes.js"
 import { authRoutes } from "./authRoutes.js"
+import { budgetRoutes } from "./budgetRoutes.js"
 import { categoryRoutes } from "./categoryRoutes.js"
 import { importRoutes } from "./importRoutes.js"
 import { reportRoutes } from "./reportRoutes.js"
@@ -52,4 +54,5 @@ export const routes: FastifyPluginAsyncZod = async (app) => {
   await app.register(ruleRoutes, { prefix: "/rules" })
   await app.register(transactionRoutes, { prefix: "/transactions" })
   await app.register(reportRoutes, { prefix: "/reports" })
+  await app.register(budgetRoutes, { prefix: "/budgets" })
 }
