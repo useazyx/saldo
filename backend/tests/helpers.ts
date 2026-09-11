@@ -5,11 +5,12 @@
  * - Limpar o banco entre um teste e outro
  * - Criar conta e já pegar o token, pra não repetir isso em todo arquivo
  * Feito por: Arthur Roberto Weege Pontes
- * Versão: 1.1.0
+ * Versão: 1.2.0
  * Data: 2026-09-11
  * Alterações:
  * - v1.0.0 (2026-09-11): Implementação inicial
  * - v1.1.0 (2026-09-11): resetDatabase, createUserAndLogin e authHeader
+ * - v1.2.0 (2026-09-11): multipartFile pra testar upload
  */
 
 import { randomUUID } from "node:crypto"
@@ -48,3 +49,17 @@ export async function createUserAndLogin(app: TestApp, name = "Pessoa de Teste")
 }
 
 export const authHeader = (token: string) => ({ authorization: `Bearer ${token}` })
+
+// Monta um upload multipart na mão (o inject não tem FormData), já com o token
+export function multipartFile(token: string, fileName: string, content: string | Buffer) {
+  const boundary = "----saldo-test-boundary"
+  const head = Buffer.from(
+    `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${fileName}"\r\nContent-Type: text/csv\r\n\r\n`
+  )
+  const tail = Buffer.from(`\r\n--${boundary}--\r\n`)
+
+  return {
+    payload: Buffer.concat([head, Buffer.isBuffer(content) ? content : Buffer.from(content), tail]),
+    headers: { ...authHeader(token), "content-type": `multipart/form-data; boundary=${boundary}` },
+  }
+}

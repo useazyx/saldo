@@ -5,13 +5,15 @@
  * - Plugar segurança, tratamento de erro e rotas
  * - Ficar separado do server.ts pra os testes conseguirem usar a API sem subir servidor
  * Feito por: Arthur Roberto Weege Pontes
- * Versão: 1.1.0
+ * Versão: 1.2.0
  * Data: 2026-09-11
  * Alterações:
  * - v1.0.0 (2026-09-11): Implementação inicial
  * - v1.1.0 (2026-09-11): Plugin de autenticação (JWT)
+ * - v1.2.0 (2026-09-11): Upload de arquivo (multipart) pro CSV do extrato
  */
 
+import multipart from "@fastify/multipart"
 import Fastify from "fastify"
 import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod"
 import { env } from "./config/env.js"
@@ -20,6 +22,7 @@ import { errorHandler } from "./errors/errorHandler.js"
 import { authPlugin } from "./plugins/auth.js"
 import { securityPlugin } from "./plugins/security.js"
 import { routes } from "./routes/index.js"
+import { MAX_IMPORT_BYTES } from "./schemas/importSchemas.js"
 
 // O que dá pra ligar/desligar na hora de montar a API
 interface BuildAppOptions {
@@ -56,6 +59,9 @@ export async function buildApp({ rateLimit = env.NODE_ENV !== "test" }: BuildApp
   // Segurança antes das rotas, senão o rate limit não enxerga elas
   await app.register(securityPlugin, { rateLimit })
   await app.register(authPlugin)
+
+  // Um arquivo por envio, com limite de tamanho (o CSV passa disso só se tiver algo errado)
+  await app.register(multipart, { limits: { fileSize: MAX_IMPORT_BYTES, files: 1, fields: 5 } })
 
   await app.register(routes)
 
