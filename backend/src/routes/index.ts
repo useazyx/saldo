@@ -10,12 +10,14 @@
  * - v1.0.0 (2026-09-11): Implementação inicial com o /health
  * - v1.1.0 (2026-09-11): Rotas de autenticação em /auth
  * - v1.2.0 (2026-09-11): Contas em /accounts
+ * - v1.3.0 (2026-09-11): Categorias em /categories
  */
 
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
 import { z } from "zod"
 import { accountRoutes } from "./accountRoutes.js"
 import { authRoutes } from "./authRoutes.js"
+import { categoryRoutes } from "./categoryRoutes.js"
 
 const HEALTH_RESPONSE_SCHEMA = z.object({
   status: z.literal("ok"),
@@ -37,4 +39,5 @@ export const routes: FastifyPluginAsyncZod = async (app) => {
 
   await app.register(authRoutes, { prefix: "/auth" })
   await app.register(accountRoutes, { prefix: "/accounts" })
+  await app.register(categoryRoutes, { prefix: "/categories" })
 }
