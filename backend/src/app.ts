@@ -5,17 +5,25 @@
  * - Plugar segurança, tratamento de erro e rotas
  * - Ficar separado do server.ts pra os testes conseguirem usar a API sem subir servidor
  * Feito por: Arthur Roberto Weege Pontes
- * Versão: 1.2.0
+ * Versão: 1.3.0
  * Data: 2026-09-11
  * Alterações:
  * - v1.0.0 (2026-09-11): Implementação inicial
  * - v1.1.0 (2026-09-11): Plugin de autenticação (JWT)
  * - v1.2.0 (2026-09-11): Upload de arquivo (multipart) pro CSV do extrato
+ * - v1.3.0 (2026-09-11): Documentação OpenAPI gerada dos schemas, com a tela em /docs
  */
 
 import multipart from "@fastify/multipart"
+import swagger from "@fastify/swagger"
+import swaggerUi from "@fastify/swagger-ui"
 import Fastify from "fastify"
-import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod"
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from "fastify-type-provider-zod"
 import { env } from "./config/env.js"
 import { prisma } from "./config/prisma.js"
 import { errorHandler } from "./errors/errorHandler.js"
@@ -23,6 +31,8 @@ import { authPlugin } from "./plugins/auth.js"
 import { securityPlugin } from "./plugins/security.js"
 import { routes } from "./routes/index.js"
 import { MAX_IMPORT_BYTES } from "./schemas/importSchemas.js"
+
+export const DOCS_ROUTE = "/docs"
 
 // O que dá pra ligar/desligar na hora de montar a API
 interface BuildAppOptions {
@@ -62,6 +72,22 @@ export async function buildApp({ rateLimit = env.NODE_ENV !== "test" }: BuildApp
 
   // Um arquivo por envio, com limite de tamanho (o CSV passa disso só se tiver algo errado)
   await app.register(multipart, { limits: { fileSize: MAX_IMPORT_BYTES, files: 1, fields: 5 } })
+
+  // A documentação sai dos mesmos schemas Zod que validam as rotas (não tem como ficar desatualizada)
+  await app.register(swagger, {
+    openapi: {
+      info: {
+        title: "Saldo API",
+        description: "Finanças pessoais a partir do extrato do banco: importação de CSV, categorias, relatórios e orçamentos",
+        version: "1.0.0",
+      },
+      components: {
+        securitySchemes: { bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" } },
+      },
+    },
+    transform: jsonSchemaTransform,
+  })
+  await app.register(swaggerUi, { routePrefix: DOCS_ROUTE })
 
   await app.register(routes)
 
