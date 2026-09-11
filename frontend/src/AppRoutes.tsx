@@ -4,6 +4,7 @@ import { Layout } from "./components/Layout"
 import { DashboardPage } from "./pages/DashboardPage"
 import { LoginPage } from "./pages/LoginPage"
 import { RegisterPage } from "./pages/RegisterPage"
+import { TransactionsPage } from "./pages/TransactionsPage"
 
 export function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ export function AppRoutes() {
         }
       >
         <Route index element={<DashboardPage />} />
+        <Route path="lancamentos" element={<TransactionsPage />} />
       </Route>
     </Routes>
   )

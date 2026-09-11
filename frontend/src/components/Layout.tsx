@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut } from "lucide-react"
+import { LayoutDashboard, LogOut, ReceiptText } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet } from "react-router"
 import { useAuth } from "../auth/AuthContext"
@@ -10,7 +10,10 @@ export interface NavItem {
 }
 
 // Cada tela nova entra aqui e aparece na barra lateral (computador) e na barra de baixo (celular)
-export const NAV_ITEMS: NavItem[] = [{ to: "/", label: "Painel", icon: <LayoutDashboard aria-hidden className="size-5" /> }]
+export const NAV_ITEMS: NavItem[] = [
+  { to: "/", label: "Painel", icon: <LayoutDashboard aria-hidden className="size-5" /> },
+  { to: "/lancamentos", label: "Lançamentos", icon: <ReceiptText aria-hidden className="size-5" /> },
+]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${

@@ -64,6 +64,10 @@ describe("dashboard", () => {
     expect(screen.getByText(/R\$ 700,00 a mais que/)).toBeInTheDocument()
     expect(screen.getByText(/R\$ 500,00 a menos que/)).toBeInTheDocument()
     expect(screen.getByText(/2 lançamentos deste mês estão sem categoria/)).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Organizar agora" })).toHaveAttribute(
+      "href",
+      `/lancamentos?mes=${MONTH}&categoria=none`
+    )
   })
 
   it("exposes the chart data as tables for screen readers", async () => {

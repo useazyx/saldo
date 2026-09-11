@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router"
 import { useAuth } from "../auth/AuthContext"
 import { BudgetMeter } from "../components/BudgetMeter"
 import { CategorySpendingChart } from "../components/dashboard/CategorySpendingChart"
@@ -70,8 +71,11 @@ export function DashboardPage() {
           {summary.data.uncategorized_count > 0 && (
             <Alert tone="warning">
               {summary.data.uncategorized_count === 1
-                ? "1 lançamento deste mês está sem categoria e fica fora dos totais por categoria."
-                : `${summary.data.uncategorized_count} lançamentos deste mês estão sem categoria e ficam fora dos totais por categoria.`}
+                ? "1 lançamento deste mês está sem categoria. "
+                : `${summary.data.uncategorized_count} lançamentos deste mês estão sem categoria. `}
+              <Link to={`/lancamentos?mes=${month}&categoria=none`} className="font-medium underline">
+                Organizar agora
+              </Link>
             </Alert>
           )}
 

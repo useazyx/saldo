@@ -37,6 +37,10 @@ export const formatShortMonth = (month: string) =>
 
 export const formatPercent = (share: number) => percentFormatter.format(share)
 
+// Hoje no relógio de quem está usando, como AAAA-MM-DD
+export const todayDate = (now = new Date()) =>
+  `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
+
 // Mês atual no relógio de quem está usando
 export const currentMonth = (now = new Date()) =>
   `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`
