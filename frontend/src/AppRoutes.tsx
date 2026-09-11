@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router"
 import { RequireAuth } from "./auth/RequireAuth"
 import { Layout } from "./components/Layout"
+import { BudgetsPage } from "./pages/BudgetsPage"
 import { CategoriesPage } from "./pages/CategoriesPage"
 import { DashboardPage } from "./pages/DashboardPage"
 import { ImportPage } from "./pages/ImportPage"
@@ -24,6 +25,7 @@ export function AppRoutes() {
         <Route path="lancamentos" element={<TransactionsPage />} />
         <Route path="importar" element={<ImportPage />} />
         <Route path="categorias" element={<CategoriesPage />} />
+        <Route path="orcamentos" element={<BudgetsPage />} />
       </Route>
     </Routes>
   )

@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, ReceiptText, Tags, Upload } from "lucide-react"
+import { LayoutDashboard, LogOut, PiggyBank, ReceiptText, Tags, Upload } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet } from "react-router"
 import { useAuth } from "../auth/AuthContext"
@@ -15,6 +15,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/lancamentos", label: "Lançamentos", icon: <ReceiptText aria-hidden className="size-5" /> },
   { to: "/importar", label: "Importar", icon: <Upload aria-hidden className="size-5" /> },
   { to: "/categorias", label: "Categorias", icon: <Tags aria-hidden className="size-5" /> },
+  { to: "/orcamentos", label: "Orçamentos", icon: <PiggyBank aria-hidden className="size-5" /> },
 ]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
