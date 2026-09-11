@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/*
+ * Cores do Saldo: fundo e texto neutros, um azul de ação e cor forte só onde tem significado
+ * (entrada, saída, alerta). As 8 cores de categoria são a paleta validada pra daltonismo,
+ * com um tom próprio pro tema escuro (não é só inverter).
+ */
+@theme {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-page: #f9f9f7;
+  --color-surface: #fcfcfb;
+  --color-surface-raised: #ffffff;
+  --color-border: rgba(11, 11, 11, 0.1);
+  --color-grid: #e1e0d9;
+  --color-ink: #0b0b0b;
+  --color-ink-secondary: #52514e;
+  --color-ink-muted: #6f6d68;
+  --color-action: #2a78d6;
+  --color-action-strong: #1c5cab;
+  --color-income: #006300;
+  --color-expense: #b42f2f;
+  --color-warning: #8a5a00;
+  --color-warning-bg: #fdf3dc;
+  --color-danger-bg: #fbe9e9;
+
+  --color-cat-blue: #2a78d6;
+  --color-cat-orange: #eb6834;
+  --color-cat-aqua: #1baf7a;
+  --color-cat-yellow: #eda100;
+  --color-cat-magenta: #e87ba4;
+  --color-cat-green: #008300;
+  --color-cat-violet: #4a3aa7;
+  --color-cat-red: #e34948;
+  --color-cat-none: #9a9892;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-page: #0d0d0d;
+    --color-surface: #1a1a19;
+    --color-surface-raised: #222220;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-grid: #2c2c2a;
+    --color-ink: #ffffff;
+    --color-ink-secondary: #c3c2b7;
+    --color-ink-muted: #9a9892;
+    --color-action: #3987e5;
+    --color-action-strong: #6da7ec;
+    --color-income: #0ca30c;
+    --color-expense: #e66767;
+    --color-warning: #fab219;
+    --color-warning-bg: #2e2410;
+    --color-danger-bg: #331b1b;
+
+    --color-cat-blue: #3987e5;
+    --color-cat-orange: #d95926;
+    --color-cat-aqua: #199e70;
+    --color-cat-yellow: #c98500;
+    --color-cat-magenta: #d55181;
+    --color-cat-green: #008300;
+    --color-cat-violet: #9085e9;
+    --color-cat-red: #e66767;
+    --color-cat-none: #6f6d68;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dinheiro em coluna precisa alinhar os dígitos */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
