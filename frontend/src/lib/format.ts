@@ -31,6 +31,12 @@ export const formatDate = (date: string) => {
 // "2026-08" -> "agosto de 2026"
 export const formatMonth = (month: string) => monthFormatter.format(new Date(`${month}-01T00:00:00Z`))
 
+// "2026-08" -> "Agosto de 2026" (título: só a primeira letra maiúscula, o "de" continua minúsculo)
+export const formatMonthTitle = (month: string) => {
+  const text = formatMonth(month)
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 // "2026-08" -> "ago"
 export const formatShortMonth = (month: string) =>
   shortMonthFormatter.format(new Date(`${month}-01T00:00:00Z`)).replace(".", "")

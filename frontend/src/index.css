@@ -71,12 +71,13 @@
     --color-cat-red: #e66767;
     --color-cat-none: #6f6d68;
 
+    /* No escuro a trilha fica perto do fundo, pra não competir com o preenchimento */
     --color-meter-ok: #3987e5;
-    --color-meter-ok-track: #184f95;
+    --color-meter-ok-track: #1d2a3b;
     --color-meter-warning: #fab219;
-    --color-meter-warning-track: #4a3a12;
+    --color-meter-warning-track: #33291a;
     --color-meter-over: #e66767;
-    --color-meter-over-track: #4a2323;
+    --color-meter-over-track: #3a2222;
   }
 }
 

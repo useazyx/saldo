@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { currentMonth, formatMonth, shiftMonth } from "../lib/format"
+import { currentMonth, formatMonthTitle, shiftMonth } from "../lib/format"
 
 interface MonthPickerProps {
   value: string
@@ -20,8 +20,8 @@ export function MonthPicker({ value, onChange }: MonthPickerProps) {
       >
         <ChevronLeft aria-hidden className="size-4" />
       </button>
-      <span aria-live="polite" className="min-w-36 px-2 text-center text-sm font-medium capitalize text-ink">
-        {formatMonth(value)}
+      <span aria-live="polite" className="min-w-36 px-2 text-center text-sm font-medium text-ink">
+        {formatMonthTitle(value)}
       </span>
       <button
         type="button"

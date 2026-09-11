@@ -85,7 +85,8 @@ function Stat({ label, value, strong = false }: { label: string; value: string; 
   return (
     <div className="rounded-lg border border-border bg-page px-3 py-2">
       <dt className="text-xs text-ink-muted">{label}</dt>
-      <dd className={`mt-0.5 text-sm ${strong ? "text-lg font-semibold text-ink" : "font-medium text-ink-secondary"}`}>{value}</dd>
+      {/* Uma classe de tamanho só por vez (com text-sm e text-lg juntas, o CSS decide sozinho qual ganha) */}
+      <dd className={`mt-0.5 ${strong ? "text-lg font-semibold text-ink" : "text-sm font-medium text-ink-secondary"}`}>{value}</dd>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { formatCompactMoney, formatMoney, formatMonth, formatShortMonth } from "../../lib/format"
+import { formatCompactMoney, formatMoney, formatMonth, formatMonthTitle, formatShortMonth } from "../../lib/format"
 import type { MonthTotals } from "../../lib/types"
 import { useThemeColors } from "../../lib/useThemeColors"
 import { ChartTooltip } from "./ChartTooltip"
@@ -58,7 +58,7 @@ export function MonthlyTrendChart({ trend }: { trend: MonthTotals[] }) {
                 if (!active || !row) return null
                 return (
                   <ChartTooltip
-                    title={formatMonth(row.month)}
+                    title={formatMonthTitle(row.month)}
                     rows={series.map((item) => ({ color: item.color, name: item.name, value: formatMoney(row[item.key]) }))}
                   />
                 )
