@@ -1,5 +1,13 @@
 // schema.prisma - O mapa do banco do Saldo
-// Os models entram na modelagem.
+// # Pra que serve?
+// - Guardar contas, categorias e cada lançamento do extrato (valor em centavos, negativo = saída)
+// - Registrar cada importação de CSV e as regras que categorizam sozinhas
+// - Guardar o orçamento de cada categoria por mês
+// Feito por: Arthur Roberto Weege Pontes
+// Versão: 1.0.0
+// Data: 2026-09-11
+// Alterações:
+// - v1.0.0 (2026-09-11): Primeira modelagem
 
 generator client {
   provider = "prisma-client-js"
@@ -8,4 +16,135 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum CategoryKind {
+  INCOME
+  EXPENSE
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now()) @db.Timestamptz(3)
+  updated_at    DateTime @updatedAt @db.Timestamptz(3)
+
+  accounts     Account[]
+  categories   Category[]
+  transactions Transaction[]
+  imports      StatementImport[]
+  rules        CategoryRule[]
+  budgets      Budget[]
+
+  @@map("users")
+}
+
+// Uma conta ou cartão (Nubank, conta do Itaú, carteira...)
+model Account {
+  id         String   @id @default(uuid())
+  user_id    String
+  name       String
+  created_at DateTime @default(now()) @db.Timestamptz(3)
+
+  user         User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  imports      StatementImport[]
+
+  @@unique([user_id, name])
+  @@map("accounts")
+}
+
+// Categoria de entrada (INCOME) ou saída (EXPENSE), com a cor que aparece nos gráficos
+model Category {
+  id         String       @id @default(uuid())
+  user_id    String
+  name       String
+  kind       CategoryKind
+  color      String
+  created_at DateTime     @default(now()) @db.Timestamptz(3)
+
+  user         User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  rules        CategoryRule[]
+  budgets      Budget[]
+
+  @@unique([user_id, name])
+  @@map("categories")
+}
+
+// Um lançamento. O fingerprint é único por conta: importar o mesmo extrato duas vezes não duplica nada.
+model Transaction {
+  id           String   @id @default(uuid())
+  user_id      String
+  account_id   String
+  category_id  String?
+  import_id    String?
+  occurred_on  DateTime @db.Date
+  description  String
+  amount_cents Int
+  fingerprint  String
+  notes        String?
+  created_at   DateTime @default(now()) @db.Timestamptz(3)
+  updated_at   DateTime @updatedAt @db.Timestamptz(3)
+
+  user      User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  account   Account          @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  category  Category?        @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  statement StatementImport? @relation(fields: [import_id], references: [id], onDelete: SetNull)
+
+  @@unique([account_id, fingerprint])
+  @@index([user_id, occurred_on])
+  @@index([user_id, category_id])
+  @@map("transactions")
+}
+
+// O registro de cada CSV importado: quantas linhas vieram, entraram, eram repetidas ou foram puladas
+model StatementImport {
+  id             String   @id @default(uuid())
+  user_id        String
+  account_id     String
+  file_name      String
+  total_rows     Int
+  imported_rows  Int
+  duplicate_rows Int
+  skipped_rows   Int
+  created_at     DateTime @default(now()) @db.Timestamptz(3)
+
+  user         User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  account      Account       @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("statement_imports")
+}
+
+// "Se a descrição contém X, a categoria é Y" (tipo "ifood" -> Alimentação)
+model CategoryRule {
+  id          String   @id @default(uuid())
+  user_id     String
+  category_id String
+  pattern     String
+  created_at  DateTime @default(now()) @db.Timestamptz(3)
+
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, pattern])
+  @@map("category_rules")
+}
+
+// Quanto dá pra gastar numa categoria num mês (month é sempre o dia 1)
+model Budget {
+  id          String   @id @default(uuid())
+  user_id     String
+  category_id String
+  month       DateTime @db.Date
+  limit_cents Int
+
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@unique([category_id, month])
+  @@map("budgets")
 }
