@@ -30,9 +30,12 @@ describe("login", () => {
   })
 
   it("fills the demo account, logs in and opens the dashboard", async () => {
-    const fetchMock = mockApi((url) =>
-      url.endsWith("/auth/login") ? { status: 200, body: { token: "t0k3n", user: ANA } } : { status: 200, body: ANA }
-    )
+    const fetchMock = mockApi((url) => {
+      if (url.endsWith("/auth/login")) return { status: 200, body: { token: "t0k3n", user: ANA } }
+      if (url.endsWith("/auth/me")) return { status: 200, body: ANA }
+      // O painel também busca relatórios; aqui só interessa que ele abriu
+      return { status: 404, body: { error: "RouteNotFound", message: "Fora deste teste" } }
+    })
     renderApp("/entrar")
 
     await userEvent.click(screen.getByRole("button", { name: "Preencher com a conta demo" }))

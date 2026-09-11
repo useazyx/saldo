@@ -33,6 +33,14 @@
   --color-cat-violet: #4a3aa7;
   --color-cat-red: #e34948;
   --color-cat-none: #9a9892;
+
+  /* Barra de orçamento: o preenchimento diz a situação; a trilha é um tom mais claro da mesma cor */
+  --color-meter-ok: #2a78d6;
+  --color-meter-ok-track: #cde2fb;
+  --color-meter-warning: #eda100;
+  --color-meter-warning-track: #fbe7bd;
+  --color-meter-over: #d03b3b;
+  --color-meter-over-track: #f5cfcf;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +70,13 @@
     --color-cat-violet: #9085e9;
     --color-cat-red: #e66767;
     --color-cat-none: #6f6d68;
+
+    --color-meter-ok: #3987e5;
+    --color-meter-ok-track: #184f95;
+    --color-meter-warning: #fab219;
+    --color-meter-warning-track: #4a3a12;
+    --color-meter-over: #e66767;
+    --color-meter-over-track: #4a2323;
   }
 }
 
