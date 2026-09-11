@@ -13,6 +13,7 @@
  * - v1.3.0 (2026-09-11): Categorias em /categories
  * - v1.4.0 (2026-09-11): Importação de extrato em /imports
  * - v1.5.0 (2026-09-11): Regras de categoria em /rules
+ * - v1.6.0 (2026-09-11): Lançamentos em /transactions
  */
 
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
@@ -22,6 +23,7 @@ import { authRoutes } from "./authRoutes.js"
 import { categoryRoutes } from "./categoryRoutes.js"
 import { importRoutes } from "./importRoutes.js"
 import { ruleRoutes } from "./ruleRoutes.js"
+import { transactionRoutes } from "./transactionRoutes.js"
 
 const HEALTH_RESPONSE_SCHEMA = z.object({
   status: z.literal("ok"),
@@ -46,4 +48,5 @@ export const routes: FastifyPluginAsyncZod = async (app) => {
   await app.register(categoryRoutes, { prefix: "/categories" })
   await app.register(importRoutes, { prefix: "/imports" })
   await app.register(ruleRoutes, { prefix: "/rules" })
+  await app.register(transactionRoutes, { prefix: "/transactions" })
 }
