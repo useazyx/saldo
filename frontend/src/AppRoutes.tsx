@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router"
 import { RequireAuth } from "./auth/RequireAuth"
 import { Layout } from "./components/Layout"
 import { DashboardPage } from "./pages/DashboardPage"
+import { ImportPage } from "./pages/ImportPage"
 import { LoginPage } from "./pages/LoginPage"
 import { RegisterPage } from "./pages/RegisterPage"
 import { TransactionsPage } from "./pages/TransactionsPage"
@@ -20,6 +21,7 @@ export function AppRoutes() {
       >
         <Route index element={<DashboardPage />} />
         <Route path="lancamentos" element={<TransactionsPage />} />
+        <Route path="importar" element={<ImportPage />} />
       </Route>
     </Routes>
   )
