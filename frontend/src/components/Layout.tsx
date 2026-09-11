@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, PiggyBank, ReceiptText, Tags, Upload } from "lucide-react"
+import { Landmark, LayoutDashboard, LogOut, PiggyBank, ReceiptText, Tags, Upload } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet } from "react-router"
 import { useAuth } from "../auth/AuthContext"
@@ -6,16 +6,19 @@ import { useAuth } from "../auth/AuthContext"
 export interface NavItem {
   to: string
   label: string
+  // Nome curto pra barra de baixo do celular (seis itens em 360px não cabem com o nome inteiro)
+  shortLabel: string
   icon: ReactNode
 }
 
 // Cada tela nova entra aqui e aparece na barra lateral (computador) e na barra de baixo (celular)
 export const NAV_ITEMS: NavItem[] = [
-  { to: "/", label: "Painel", icon: <LayoutDashboard aria-hidden className="size-5" /> },
-  { to: "/lancamentos", label: "Lançamentos", icon: <ReceiptText aria-hidden className="size-5" /> },
-  { to: "/importar", label: "Importar", icon: <Upload aria-hidden className="size-5" /> },
-  { to: "/categorias", label: "Categorias", icon: <Tags aria-hidden className="size-5" /> },
-  { to: "/orcamentos", label: "Orçamentos", icon: <PiggyBank aria-hidden className="size-5" /> },
+  { to: "/", label: "Painel", shortLabel: "Início", icon: <LayoutDashboard aria-hidden className="size-5" /> },
+  { to: "/lancamentos", label: "Lançamentos", shortLabel: "Extrato", icon: <ReceiptText aria-hidden className="size-5" /> },
+  { to: "/importar", label: "Importar", shortLabel: "Importar", icon: <Upload aria-hidden className="size-5" /> },
+  { to: "/categorias", label: "Categorias", shortLabel: "Categorias", icon: <Tags aria-hidden className="size-5" /> },
+  { to: "/orcamentos", label: "Orçamentos", shortLabel: "Limites", icon: <PiggyBank aria-hidden className="size-5" /> },
+  { to: "/contas", label: "Contas", shortLabel: "Contas", icon: <Landmark aria-hidden className="size-5" /> },
 ]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -80,7 +83,10 @@ export function Layout() {
             }
           >
             {item.icon}
-            <span className="truncate">{item.label}</span>
+            <span className="max-w-full truncate" aria-hidden>
+              {item.shortLabel}
+            </span>
+            <span className="sr-only">{item.label}</span>
           </NavLink>
         ))}
       </nav>
